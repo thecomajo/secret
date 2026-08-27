@@ -1096,6 +1096,22 @@
       font-weight: 850;
     }
 
+    .forecast-omitted {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 68px;
+      min-height: 30px;
+      padding: 4px 8px;
+      border: 1px solid #cfd5d8;
+      border-radius: 5px;
+      background: #f3f5f6;
+      color: #536069;
+      font-size: 12px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
     .forecast-warning {
       width: min(520px, calc(100vw - 32px));
       border: 1px solid #d5b185;
@@ -1924,13 +1940,149 @@
     );
 
     const forecastOverrideMap = new Map([
-      ["전남대|의예과|교과(지역)", {
+      ["전남대|의예과|교과|교과(지역)", {
         trend:"drop",
         label:"소폭 하락",
-        first:"1.09~1.15",
-        final:"1.16~1.23",
+        first:"1.18~1.23",
+        final:"1.25~1.30",
         confidence:"중간",
-        effect:"모집이 78명에서 86명으로 늘어 소폭 완화될 수 있습니다. 다만 전남대 의예과는 최상위 선호 구간이고 3합5도 강해 합격층이 크게 움직이기 어렵습니다. 지역의사와 모두 합격하면 일반 지역인재를 선택하므로 지역의사 신설은 이 전형의 직접 이탈 요인에서 제외했습니다."
+        effect:"모집 인원이 78명에서 86명으로 늘고, 3합5 충족자가 지난해보다 줄어든다는 가정을 반영했습니다. 다만 전남대 의예과는 호남권 최상위 선호 구간이므로 최초합 끝선은 크게 낮추지 않고 충원합 끝선에 완화 폭을 더 반영했습니다."
+      }],
+      ["전남대|의예과|종합|종합(고교Ⅰ)", {
+        trend:"flat",
+        label:"유지~소폭 하락",
+        first:"1.10~1.20",
+        final:"1.12~1.25",
+        confidence:"중하",
+        effect:"고교생활우수자Ⅰ은 의예과 최상위 지원층이 먼저 채우는 종합전형이라 큰 하락은 제한했습니다. 다만 3합5 충족자 감소와 서류·면접에 따른 변동성을 반영해 충원합 끝선을 조금 넓게 잡았습니다."
+      }],
+      ["전북대|의예과|교과|일반학생", {
+        trend:"drop",
+        label:"소폭 하락",
+        first:"1.26~1.30",
+        final:"1.31~1.35",
+        confidence:"중간",
+        effect:"전남대와 전북대 의예과를 함께 지원할 수 있는 학생층에서는 전남대 선호가 먼저 작동하고, 전남대 등록이 채워진 뒤 전북대 일반학생전형이 이어지는 흐름을 반영했습니다. 의대 최상위 구간이므로 완화 폭은 작게 잡았습니다."
+      }],
+      ["전북대|의예과|교과|지역의사(광역권)", {
+        trend:"unknown",
+        label:"신설·변동성 큼",
+        first:"1.25~1.50",
+        final:"1.50~1.80",
+        confidence:"낮음",
+        effect:"전남·광주 학생들은 전남대와 조선대 지역의사를 먼저 검토할 가능성이 있어 전북대 광역권은 광주 학생 비중이 커질 수 있다고 봤습니다. 조선대 광역권과 비교하면 국립대인 전북대를 선택할 가능성을 반영했고, 조선대 치대·약대 지원층의 이동과 원광대 의대 종합에서 일반고 1.7등급대 합격 사례가 확인된 점을 참고해 충원합 끝선을 1.8까지 열었습니다. 10년 의무복무와 일반 의대 중복합격 이탈도 함께 고려했습니다."
+      }],
+      ["전북대|의예과|교과|지역의사(전주권)", {
+        trend:"unknown",
+        label:"신설·변동성 큼",
+        first:"1.15~1.30",
+        final:"1.30~1.50",
+        confidence:"낮음",
+        effect:"원광대 지역인재 의대와 함께 합격하면 국립대인 전북대 지역의사 전주권을 선택할 가능성이 높다고 봤습니다. 3합6을 맞출 수 있는 전북대·원광대 치대와 원광대 한의대 지원층이 같은 교과 방식의 의대로 이동하기 쉬운 점도 반영했습니다. 10년 의무복무에 따른 지원 포기는 남는 변수입니다."
+      }],
+      ["전북대|의예과|교과|지역인재 2", {
+        trend:"drop",
+        label:"하락 폭 큼",
+        first:"1.45~1.80",
+        final:"2.00~2.50",
+        confidence:"중하",
+        effect:"전북권에서 4합6을 충족하는 학생이 크게 줄어든다는 가정을 가장 강하게 반영했습니다. 최초합은 내신 상위권이 먼저 채우지만, 여러 의대 전형의 중복합격과 최저 미충족이 겹치면 충원합 끝선은 2점대까지 내려갈 수 있다고 봤습니다."
+      }],
+      ["전북대|의예과|종합|지역인재 2", {
+        trend:"unknown",
+        label:"신설·변동성 큼",
+        first:"1.45~1.85",
+        final:"2.00~2.50",
+        confidence:"낮음",
+        effect:"신설 4명 종합전형이지만 전북권 4합6 충족자가 크게 줄어든다는 가정을 반영했습니다. 서류·면접 평가와 교과 지역인재2 중복지원 때문에 최초합 범위도 넓게, 충원합 끝선은 2점대까지 열어 두었습니다."
+      }],
+      ["조선대|의예과|교과|지역인재", {
+        trend:"drop",
+        label:"소폭 하락",
+        first:"1.22~1.32",
+        final:"1.40~1.50",
+        confidence:"중간",
+        effect:"광주 지역에서도 수능최저를 충족하는 학생이 지난해보다 조금 줄어든다는 가정을 반영했습니다. 의예과는 먼저 채워지는 계열이라 최초합은 단단하게 보고, 중복합격 이탈은 충원합 끝선에 더 반영했습니다."
+      }],
+      ["원광대|의예과|교과|지역인재Ⅰ(전북)", {
+        trend:"drop",
+        label:"소폭 하락",
+        first:"1.18~1.28",
+        final:"1.29~1.38",
+        confidence:"중간",
+        effect:"전북대 지역의사 전주권과 함께 합격하면 전북대로 이동할 가능성을 반영했습니다. 의대 방향의 학생부가 강한 학생은 원광대 종합을 선택할 수 있어, 이 교과전형에는 교과 성적은 좋지만 학생부 진로 방향이 의대와 덜 맞는 학생이 상대적으로 더 모일 수 있다고 봤습니다."
+      }],
+      ["원광대|의예과|교과|지역인재Ⅰ(호남)", {
+        trend:"drop",
+        label:"소폭 하락",
+        first:"1.20~1.30",
+        final:"1.42~1.50",
+        confidence:"중간",
+        effect:"광주·전남 학생들이 지원할 수 있는 의대 교과와 지역의사 선택지가 늘어 원서와 등록이 분산될 가능성을 반영했습니다. 최초합보다 충원합 끝선의 완화 폭을 더 크게 잡았습니다."
+      }],
+      ["원광대|의예과|종합|지역인재Ⅰ(전북)", {
+        trend:"unknown",
+        label:"변동성 큼",
+        first:"1.40~1.60",
+        final:"1.50~1.80",
+        confidence:"중하",
+        effect:"지역인재 종합은 학생부와 면접의 영향이 커 교과등급만으로 줄 세우기 어렵습니다. 전북대 지역의사와 다른 의대의 중복합격 이탈을 반영하되, 의대 방향의 학생부가 강한 지원자는 남을 수 있어 1.4~1.8 사이의 넓은 범위로 봤습니다."
+      }],
+      ["원광대|의예과|종합|지역인재Ⅰ(호남)", {
+        trend:"unknown",
+        label:"변동성 큼",
+        first:"1.30~1.35",
+        final:"1.60~1.70",
+        confidence:"중하",
+        effect:"광주·전남에서는 조선대 의대 다음 선택지로 작동할 수 있지만, 전북대 지역의사 광역권과도 지원층이 겹친다고 봤습니다. 최초합 상단은 강하게 유지하고 중복합격 이탈은 충원합 끝선에 크게 반영했습니다."
+      }],
+      ["전북대|치의예과|교과|지역인재 2", {
+        trend:"drop",
+        label:"하락",
+        first:"1.25~1.45",
+        final:"1.50~1.70",
+        confidence:"중간",
+        effect:"3합6을 충족하는 전북권 치대 지원층 가운데 교과 성적이 좋은 학생이 전북대 지역의사 의대로 이동할 가능성을 반영했습니다. 모집 인원 증가도 충원합 끝선 완화 요인입니다."
+      }],
+      ["원광대|치의예과(자연)|교과|지역인재(전북)", {
+        trend:"drop",
+        label:"하락",
+        first:"1.40~1.60",
+        final:"1.65~1.85",
+        confidence:"중간",
+        effect:"전북권 교과 상위 지원층이 전북대 지역의사 의대로 이동할 가능성을 반영했습니다. 원광대 치대 교과 모집 인원 증가까지 겹쳐 충원합 끝선을 더 넓게 잡았습니다."
+      }],
+      ["우석대|한의예과|교과|지역인재1(전북)", {
+        trend:"unknown",
+        label:"신설·변동성 큼",
+        first:"1.25~1.50",
+        final:"1.50~1.80",
+        confidence:"낮음",
+        effect:"원광대 한의대 지역인재 교과 합격자가 전북대 지역의사 의대로 이동하면, 원광대에서 생긴 자리를 우석대 한의대 지원자가 다시 채우는 연쇄 이동을 반영했습니다. 신설 5명 전형이라 실제 지원자 구성에 따라 폭이 클 수 있습니다."
+      }],
+      ["목포대|약학과|종합|종합(지역)", {
+        trend:"flat",
+        label:"유지~소폭 하락",
+        first:"1.62~1.78",
+        final:"1.70~1.90",
+        confidence:"중하",
+        effect:"수능최저 완화는 합격선을 높이는 요인이지만, 의대 지역의사 신설과 상위권 이동은 반대 방향으로 작용합니다. 종합 4명 소수 모집의 변동성을 반영해 2026 입결 주변으로 범위를 넓게 잡았습니다."
+      }],
+      ["순천대|약학과|교과|지역인재", {
+        trend:"drop",
+        label:"소폭 하락",
+        first:"1.40~1.50",
+        final:"1.51~1.65",
+        confidence:"중간",
+        effect:"지역인재 모집 인원은 유지되지만 수능최저 충족자 감소와 의대 지역의사로의 상위권 이동을 반영했습니다. 전년도 최초합과 충원합의 간격을 기준으로 최초합 끝선도 함께 조정했습니다."
+      }],
+      ["전북대|수의예과|종합|지역인재 2", {
+        trend:"unknown",
+        label:"신설·변동성 큼",
+        first:"1.45~1.70",
+        final:"1.73~2.00",
+        confidence:"낮음",
+        effect:"신설 2명 종합전형이라 한두 명의 학생부와 등록 선택이 끝선을 크게 바꿀 수 있습니다. 의대 지역의사 신설에 따른 상위권 이동과 종합평가의 변동성을 함께 반영했습니다."
       }]
     ]);
 
@@ -1957,31 +2109,42 @@
     const fieldOrder = new Map(["의대", "치대", "한의대", "약대", "수의대"].map((value, index) => [value, index]));
     const collegePreferenceOrder = new Map(["전남대", "전북대", "조선대", "원광대", "우석대", "동신대", "목포대", "순천대"].map((value, index) => [value, index]));
 
+    function isSmallRegionalDoctor(row) {
+      return String(row.scope || "").startsWith("지역의사(") && row.seats27 <= 3;
+    }
+
     const gradeRows = displayGradeSources
       .filter(row => row.seats27 > 0)
       .map(row => {
         const regionalAssumption = regionalAssumptionMap.get(`${row.college}|${row.scope}`);
-        const forecastOverride = forecastOverrideMap.get(`${row.college}|${officialMajorName(row)}|${row.admission}`);
+        const forecastOverride = forecastOverrideMap.get(`${row.college}|${officialMajorName(row)}|${row.type}|${row.admission}`);
         const inferred = applyFieldHierarchy(row, inferredTrend(row));
-        const analysis = regionalAssumption || forecastOverride || inferred;
+        const analysis = forecastOverride || regionalAssumption || inferred;
+        const smallRegionalDoctor = isSmallRegionalDoctor(row);
         return {
           ...row,
-          trend: analysis.trend,
-          label: analysis.label,
-          effect: regionalAssumption
+          trend: smallRegionalDoctor ? "unknown" : analysis.trend,
+          label: smallRegionalDoctor ? "예측 제외" : analysis.label,
+          effect: smallRegionalDoctor
+            ? "지역의사제 모집 인원이 3명 이하인 소수 전형이라 한두 명의 성적만으로도 끝선이 크게 달라집니다. 해당 권역 재학생 중 수능최저 충족 현황에 따라 결과가 크게 달라질 수 있어 2027 최초합·충원합 예상등급을 제시하지 않았습니다."
+            : forecastOverride?.effect || (regionalAssumption
             ? `${regionalAssumption.judge} 10년 의무복무에 따른 지원 포기와 일반 의대 중복합격 이탈도 함께 반영했습니다.`
-            : forecastOverride?.effect || analysis.effect,
-          firstForecast: regionalAssumption
+            : analysis.effect),
+          firstForecast: smallRegionalDoctor
+            ? {omitted:true}
+            : forecastOverride
+            ? {range:forecastOverride.first, mode:"상담자 조정"}
+            : regionalAssumption
             ? {range:regionalAssumption.first, mode:"지역별 가설"}
-            : forecastOverride
-              ? {range:forecastOverride.first, mode:"직접 입결 보정"}
             : forecastGrade(row, "first", analysis),
-          finalForecast: regionalAssumption
-            ? {range:regionalAssumption.final, mode:"지역별 가설"}
+          finalForecast: smallRegionalDoctor
+            ? {omitted:true}
             : forecastOverride
-              ? {range:forecastOverride.final, mode:"직접 입결 보정"}
+            ? {range:forecastOverride.final, mode:"상담자 조정"}
+            : regionalAssumption
+            ? {range:regionalAssumption.final, mode:"지역별 가설"}
             : forecastGrade(row, "final", analysis),
-          confidence: regionalAssumption ? "낮음" : forecastOverride?.confidence || confidenceFor(row),
+          confidence: smallRegionalDoctor ? "해당 없음" : forecastOverride?.confidence || (regionalAssumption ? "낮음" : confidenceFor(row)),
           seatChange: seatChangeText(row)
         };
       })
@@ -2226,6 +2389,9 @@
     function forecastCell(forecast, final = false, row = null) {
       if (!forecastsRevealed) {
         return `<span class="forecast-locked">숨김</span><span class="subnote">경고 확인 후 공개</span>`;
+      }
+      if (forecast?.omitted) {
+        return `<span class="forecast-omitted">예측 제외</span><span class="subnote">지역의사 3명 이하</span>`;
       }
       const className = final ? "forecast-grade forecast-final" : "forecast-grade";
       const warning = row?.type === "종합" && forecastTouchesTwoPoint(forecast)
